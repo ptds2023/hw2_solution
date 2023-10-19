@@ -1,0 +1,16 @@
+---
+title: 'Problem 2: Bees'
+author: "Aleksandr Shemendyuk"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+# Bees
+
+Load the data
+
+```{r setup, include=FALSE}
+load(here::here("dat_bee_loss.rda"))
+load(here::here("dat_bee_max.rda"))
+load(here::here("dat_bee_varroa.rda"))
+```
