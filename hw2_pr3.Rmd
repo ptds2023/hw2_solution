@@ -1,0 +1,107 @@
+# Hilbert matrix
+
+- 📝 Write a function named `hilbert_matrix` which computes a Hilbert matrix of `dim_mat` rows and `dim_mat` columns. Take `dim_mat` as a single positive integer argument using `for` loops. Run `hilbert_matrix(10)`.
+- 🛠 Modify the function to print a console message before beginning the computation, issue a warning if a positive double is input, or raise an error if input is neither a positive double nor a positive integer. Test `hilbert_matrix(10L)`, `hilbert_matrix(10)`, `hilbert_matrix("10")`.
+- 🧮 Based on an observation regarding the denominator trends in Hilbert matrix elements, propose a new implementation without `for` loops using `rep` and `seq`.
+- 🚀 Compare the execution performance of your solutions in the above steps.
+- Use `profvis::profvis({...})` to profile each function, replacing `...` with your code. Comment on the aspects of memory usage and computation time.
+- Use `microbenchmark::microbenchmark({...}, {...})` for benchmarking, replacing `...` with your implementations. Discuss the resulting outputs.
+
+```{r libraries, include = FALSE}
+library(magrittr)
+library(knitr)
+library(kableExtra)
+```
+
+## Solution with a loop
+
+```{r}
+hilbert_matrix_loop <- function(dim_mat) {
+    # Input validation
+    if (!is.numeric(dim_mat) || dim_mat <= 0) {
+        stop("Input must be a positive integer or double.")
+    }
+    
+    # Computation
+    mat <- matrix(NA_real_, nrow = dim_mat, ncol = dim_mat)
+    
+    for (i in 1:dim_mat) {
+        for (j in 1:dim_mat) {
+            mat[i, j] <- 1 / (i + j - 1)
+        }
+    }
+    
+    return(mat)
+}
+```
+
+## Solution without a slightly improved loop
+
+```{r}
+hilbert_matrix_loop_faster <- function(dim_mat) {
+    # Input validation
+    if (!is.numeric(dim_mat) || dim_mat <= 0) {
+        stop("Input must be a positive integer or double.")
+    }
+    
+    # Computation
+    mat <- matrix(NA_real_, nrow = dim_mat, ncol = dim_mat)
+    
+    for (i in 1:dim_mat) {
+        mat[i, ] <- 1 / (i + 1:dim_mat - 1)
+    }
+    
+    return(mat)
+}
+```
+
+## Solution using `rep` and `seq`
+
+```{r}
+hilbert_matrix_seq <- function(dim_mat) {
+    # Input validation
+    if (!is.numeric(dim_mat) || dim_mat <= 0) {
+        stop("Input must be a positive integer or double.")
+    }
+    
+    # Computation
+    x <- rep(seq_len(dim_mat), dim_mat) + rep(seq_len(dim_mat), each = dim_mat) - 1
+    mat <- matrix(1 / x, nrow = dim_mat, ncol = dim_mat)
+    
+    return(mat)
+}
+```
+
+## Profile and benchmark
+
+Use `profvis::profvis({...})` to profile each function, replacing `...` with your code. Comment on the aspects of memory usage and computation time.
+
+```{r}
+dim_mat <- 10e3
+profvis::profvis({
+    hilbert_matrix_loop(dim_mat)
+    hilbert_matrix_loop_faster(dim_mat)
+    hilbert_matrix_seq(dim_mat)
+})
+```
+
+Use `microbenchmark::microbenchmark({...}, {...})` for benchmarking, replacing `...` with your implementations. Discuss the resulting outputs.
+
+```{r}
+dim_mat <- 10e2
+benchmark_resulst <-  microbenchmark::microbenchmark(
+    hilbert_matrix_loop(dim_mat),
+    hilbert_matrix_loop_faster(dim_mat),
+    hilbert_matrix_seq(dim_mat),
+    times = 100
+)
+```
+
+Display the benchmark results.
+
+```{r}
+benchmark_resulst %>% 
+    summary() %>% 
+    kable() %>%
+    kable_styling()
+```
