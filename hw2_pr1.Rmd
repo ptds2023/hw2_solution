@@ -1,0 +1,91 @@
+---
+title: "Apple Management"
+author: "Aleksandr Shemendyuk"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+## Inventory Management Simulation
+
+Let's simulate the apple inventory management over a span of 52 weeks for FreshMart. 
+
+```{r setup, include=FALSE}
+# Load necessary libraries
+library(dplyr)
+library(knitr)
+```
+
+We will start by initializing our variables:
+
+```{r initialization}
+# Initial values
+inventory <- 500
+weeks <- 52
+total_sales <- 0
+total_orders <- 0
+order_status <- FALSE
+weeks_until_delivery <- 0
+
+# Vectors to store weekly data
+weekly_sales_vector <- numeric(weeks)
+deliveries_received_vector <- numeric(weeks)
+remaining_inventory_vector <- numeric(weeks)
+```
+
+Now, let's run our simulation:
+
+```{r simulation}
+# Fix the seed
+set.seed(123)
+
+# Run the simulation
+for (week in 1:weeks) {
+  # Generate non-negative sales following a normal distribution
+  weekly_sales <- max(0, round(rnorm(1, mean=100, sd=15)))
+  
+  # Check if demand exceeds available inventory
+  weekly_sales <- min(weekly_sales, inventory)
+  
+  # Reduce inventory by weekly sales
+  inventory <- inventory - weekly_sales
+  total_sales <- total_sales + weekly_sales
+  
+  # Store weekly sales data
+  weekly_sales_vector[week] <- weekly_sales
+  
+  # Check if order arrives
+  if (order_status && weeks_until_delivery == 0) {
+    inventory <- inventory + 300
+    order_status <- FALSE
+    deliveries_received_vector[week] <- 300
+  } else if (order_status) {
+    weeks_until_delivery <- weeks_until_delivery - 1
+    deliveries_received_vector[week] <- 0
+  } else {
+    deliveries_received_vector[week] <- 0
+  }
+  
+  # Check if new order should be placed
+  if (inventory < 400 && !order_status) {
+    order_status <- TRUE
+    weeks_until_delivery <- 2
+    total_orders <- total_orders + 1
+  }
+  
+  # Store remaining inventory data
+  remaining_inventory_vector[week] <- inventory
+}
+```
+
+Finally, let's present our annual report using the `kable` package:
+
+```{r report}
+annual_report <- tibble(
+  Week = 1:weeks,
+  `Apples Sold` = weekly_sales_vector,
+  `Deliveries Received` = deliveries_received_vector,
+  `Remaining Inventory` = remaining_inventory_vector
+)
+
+kable(annual_report, caption = "Annual Report for FreshMart's Apple Inventory", align = 'c')
+```
