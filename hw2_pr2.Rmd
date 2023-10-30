@@ -62,9 +62,9 @@ datdes <- dat_comb
 👆 Conduct the necessary data wrangling steps to end up with a dataset that resembles the provided example. It should have dimensions $1186 \times 7$.
 
 ```{r}
-indnum = sapply(datdes, is.numeric)
+indnum <- sapply(datdes, is.numeric)
 datdes <- datdes[is.finite(rowSums(datdes[, indnum])), ]
-datdes$period = as.factor(datdes$period) 
+datdes$period <- as.factor(datdes$period)
 head(datdes)
 ```
 
@@ -75,14 +75,18 @@ head(datdes)
 📈 Incorporate a red dashed line in your graph to represent the median of the honey bee colony loss proportion.
 
 ```{r}
-cutoff <- median(datdes$num_lost_colonies/datdes$num_max_colonies)
+cutoff <- median(datdes$num_lost_colonies / datdes$num_max_colonies)
 
-p1 <- ggplot(datdes, aes(x=region, y=num_lost_colonies/num_max_colonies, 
-                       color=period, fill=period)) +
+p1 <- ggplot(datdes, aes(
+  x = region, y = num_lost_colonies / num_max_colonies,
+  color = period, fill = period
+)) +
   geom_hline(yintercept = cutoff, color = "red", linetype = "twodash") +
-  geom_boxplot(lwd=0.1, width=0.75, alpha=1,
-               outlier.size = 1.5, outlier.alpha = 1, outlier.shape = 21,
-               color="black") +
+  geom_boxplot(
+    lwd = 0.1, width = 0.75, alpha = 1,
+    outlier.size = 1.5, outlier.alpha = 1, outlier.shape = 21,
+    color = "black"
+  ) +
   ylab("Normalized colony loss") +
   xlab("Climatic Regions") +
   ggtitle("Honeybee colony loss across different climatic regions and periods") +
