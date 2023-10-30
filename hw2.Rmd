@@ -1,0 +1,29 @@
+---
+title: "Homework 2 Solution"
+author: "Aleksandr Shemendyuk"
+date: "`r Sys.Date()`"
+output: 
+    html_document:
+        keep_md: true
+        toc: true
+        toc_float: true
+        number_sections: true
+        theme: united
+        highlight: tango
+        code_folding: hide
+        fig_caption: true
+        fig_height: 4
+        fig_width: 6
+        fig_retina: 2
+        df_print: paged
+        self_contained: true
+---
+
+```{r, child='hw2_pr1.Rmd'}
+```
+
+```{r, child='hw2_pr2.Rmd'}
+```
+
+```{r, child='hw2_pr3.Rmd'}
+```

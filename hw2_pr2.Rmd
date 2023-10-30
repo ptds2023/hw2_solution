@@ -19,7 +19,7 @@ library(tidyr)
 
 📊 Load the three data sets `dat_bee_max`, `dat_bee_varroa`, and `dat_bee_loss` into your `R` environment using `load("dataset.rda")`.
 
-```{r setup}
+```{r}
 load(here::here("dat_bee_loss.rda"))
 load(here::here("dat_bee_max.rda"))
 load(here::here("dat_bee_varroa.rda"))

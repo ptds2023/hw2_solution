@@ -5,7 +5,7 @@ date: "`r Sys.Date()`"
 output: html_document
 ---
 
-## Inventory Management Simulation
+# Inventory Management Simulation
 
 Let's simulate the apple inventory management over a span of 52 weeks for FreshMart. 
 
