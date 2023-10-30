@@ -7,7 +7,7 @@
 - Use `profvis::profvis({...})` to profile each function, replacing `...` with your code. Comment on the aspects of memory usage and computation time.
 - Use `microbenchmark::microbenchmark({...}, {...})` for benchmarking, replacing `...` with your implementations. Discuss the resulting outputs.
 
-```{r libraries, include = FALSE}
+```{r, include = FALSE}
 library(magrittr)
 library(knitr)
 library(kableExtra)
